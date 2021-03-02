@@ -11,7 +11,7 @@ public class AlarmTest {
     @Before
     public void before(){
         sensor=mock(Sensor.class);
-        alarm=new Alarm(sensor);
+        alarm=spy(new Alarm(sensor));
     }
 
     @Test
@@ -32,21 +32,18 @@ public class AlarmTest {
 
     @Test
     public void isAlarmOnActive() {
-        when(sensor.popNextPressurePsiValue())
-            .thenReturn(15d);
-
-        Alarm alarm = new Alarm(sensor);
+        when(alarm.getPsiPressureValue())
+            .thenReturn(19d);
         alarm.check();
-        assertTrue(alarm.isAlarmOn());
+        assertFalse(alarm.isAlarmOn());
     }
 
     @Test
     public void isAlarmOnInactive() {
-        when(sensor.popNextPressurePsiValue())
-            .thenReturn(19d);
+        when(alarm.getPsiPressureValue())
+            .thenReturn(26d);
 
-        Alarm alarm = new Alarm(sensor);
         alarm.check();
-        assertFalse(alarm.isAlarmOn());
+        assertTrue(alarm.isAlarmOn());
     }
 }
