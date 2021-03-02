@@ -14,7 +14,7 @@ public class Alarm implements AlarmAction
 
     public void check()
     {
-        double psiPressureValue = sensor.popNextPressurePsiValue();
+        double psiPressureValue = getPsiPressureValue();
 
         if (!isPressureInRange(psiPressureValue))
         {
@@ -22,7 +22,11 @@ public class Alarm implements AlarmAction
         }
     }
 
-    private boolean isPressureInRange(double psiPressureValue) {
+    protected double getPsiPressureValue() {
+        return sensor.popNextPressurePsiValue();
+    }
+
+    protected boolean isPressureInRange(double psiPressureValue) {
         return psiPressureValue >= LowPressureThreshold
             &&  psiPressureValue <= HighPressureThreshold;
     }

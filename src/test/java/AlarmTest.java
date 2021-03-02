@@ -7,23 +7,31 @@ import static org.mockito.Mockito.*;
 public class AlarmTest {
 
     Sensor sensor;
+    Alarm alarm;
     @Before
     public void before(){
         sensor=mock(Sensor.class);
+        alarm=new Alarm(sensor);
     }
 
     @Test
-    public void sensor26() {
+    public void getPsiPressureValue() {
+        double psi=26d;
         when(sensor.popNextPressurePsiValue())
-            .thenReturn(26d);
+            .thenReturn(psi);
 
-        Alarm alarm = new Alarm(sensor);
-        alarm.check();
-        assertTrue(alarm.isAlarmOn());
+        assertEquals(psi,alarm.getPsiPressureValue());
     }
 
     @Test
-    public void sensor15() {
+    public void isPressureInRange() {
+        assertFalse(alarm.isPressureInRange(29));
+        assertFalse(alarm.isPressureInRange(15));
+        assertTrue(alarm.isPressureInRange(19));
+    }
+
+    @Test
+    public void isAlarmOnActive() {
         when(sensor.popNextPressurePsiValue())
             .thenReturn(15d);
 
@@ -33,7 +41,7 @@ public class AlarmTest {
     }
 
     @Test
-    public void alarm19() {
+    public void isAlarmOnInactive() {
         when(sensor.popNextPressurePsiValue())
             .thenReturn(19d);
 
